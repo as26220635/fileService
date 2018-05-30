@@ -1,0 +1,26 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jaxws="http://cxf.apache.org/jaxws"
+       xsi:schemaLocation="
+    http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd"
+       xmlns:cxf="http://cxf.apache.org/core">
+
+    <import resource="classpath:META-INF/cxf/cxf.xml"/>
+    <import resource="classpath:META-INF/cxf/cxf-servlet.xml"/>
+
+    <cxf:bus>
+        <cxf:properties>
+            <!-- 定义上传文件的最大长度，限制为256M -->
+            <entry key="org.apache.cxf.stax.maxTextLength" value="268435456"/>
+        </cxf:properties>
+    </cxf:bus>
+
+    <jaxws:endpoint id="fileWSEndpoint" implementor="cn.file.service.impl.FileWSImpl" address="/file">
+        <jaxws:properties>
+            <!-- 开启MTOM -->
+            <entry key="mtom_enabled" value="true"></entry>
+        </jaxws:properties>
+    </jaxws:endpoint>
+
+</beans>
