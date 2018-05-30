@@ -12,7 +12,7 @@
     <!-- <context:annotation-config /> -->
 
     <!-- 使Spring支持自动检测组件，如注解的Repository、Service、Controller -->
-    <context:component-scan base-package="cn.nz.file" />
+    <context:component-scan base-package="cn.file" />
 
     <bean id="config" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
         <property name="locations">
