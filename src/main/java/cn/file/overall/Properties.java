@@ -26,7 +26,7 @@ public class Properties {
         JWT_SECRET = jwtSecret;
     }
 
-    @Value("#{config['FILE.dir']}")
+    @Value("#{config['file.dir']}")
     public void setFILEDir(String FILEDir) {
         FILE_DIR = FILEDir;
     }
