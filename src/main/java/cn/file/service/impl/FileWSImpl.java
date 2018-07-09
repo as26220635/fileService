@@ -39,7 +39,7 @@ public class FileWSImpl extends BaseServiceImpl implements FileWS {
                 result = false;
                 return result;
             }
-            String dir = Properties.AFFIX_DIR;
+            String dir = Properties.FILE_DIR;
             is = file.getFile().getInputStream();
             dest = new File(dir + file.getFilePath());
             if (!dest.exists()) {
@@ -109,7 +109,7 @@ public class FileWSImpl extends BaseServiceImpl implements FileWS {
         if (!checkResult.isSuccess()) {
             return fileWrapper;
         }
-        String dir = Properties.AFFIX_DIR;
+        String dir = Properties.FILE_DIR;
         try {
             File dest = new File(dir + file.getFilePath().concat(File.separator).concat(file.getFileName()));
             if (!(dest.isFile() && dest.exists())) {
@@ -140,7 +140,7 @@ public class FileWSImpl extends BaseServiceImpl implements FileWS {
             if (!checkResult.isSuccess()) {
                 return result;
             }
-            String dir = Properties.AFFIX_DIR;
+            String dir = Properties.FILE_DIR;
             File dest = new File(dir + file.getFilePath().concat(File.separator).concat(file.getFileName()));
             if (dest.isFile() && dest.exists()) {
                 result = dest.delete();

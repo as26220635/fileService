@@ -19,15 +19,15 @@ public class Properties {
      *
      * @param jwtSecret
      */
-    public static String AFFIX_DIR;
+    public static String FILE_DIR;
 
     @Value("#{config['jwt.secret']}")
     public void setJwtSecret(String jwtSecret) {
         JWT_SECRET = jwtSecret;
     }
 
-    @Value("#{config['affix.dir']}")
-    public void setAffixDir(String affixDir) {
-        AFFIX_DIR = affixDir;
+    @Value("#{config['FILE.dir']}")
+    public void setFILEDir(String FILEDir) {
+        FILE_DIR = FILEDir;
     }
 }

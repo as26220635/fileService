@@ -61,7 +61,7 @@ public class TokenUtil {
             checkResult.setSuccess(true);
             checkResult.setClaims(claims);
         } catch (ExpiredJwtException e) {
-            checkResult.setErrCode(Constants.JWT_ERRCODE_FAIL);
+            checkResult.setErrCode(Constants.JWT_ERRCODE_EXPIRE);
             checkResult.setSuccess(false);
         } catch (SignatureException e) {
             checkResult.setErrCode(Constants.JWT_ERRCODE_FAIL);
