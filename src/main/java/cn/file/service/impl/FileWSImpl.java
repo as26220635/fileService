@@ -23,6 +23,7 @@ public class FileWSImpl extends BaseServiceImpl implements FileWS {
      * @param file
      * @return
      */
+    @Override
     public boolean upload(CxfFileWrapper file) {
 
         System.out.println("上传文件:" + file.getFileName());
@@ -102,6 +103,7 @@ public class FileWSImpl extends BaseServiceImpl implements FileWS {
      * @param file
      * @return
      */
+    @Override
     public CxfFileWrapper download(CxfFileWrapper file) {
         CxfFileWrapper fileWrapper = new CxfFileWrapper();
         //验证令牌
@@ -132,6 +134,7 @@ public class FileWSImpl extends BaseServiceImpl implements FileWS {
      * @param file
      * @return
      */
+    @Override
     public boolean delete(CxfFileWrapper file) {
         boolean result = false;
         try {

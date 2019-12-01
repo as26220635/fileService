@@ -9,8 +9,5 @@
         <module name="fileService" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="fileService" target="1.5" />
-    </bytecodeTargetLevel>
   </component>
 </project>
