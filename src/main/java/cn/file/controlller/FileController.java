@@ -71,7 +71,7 @@ public class FileController implements LastModified {
         if (webRequest.checkNotModified(lastModified)) {
             return;
         }
-        if (isEmpty(base64)){
+        if (isEmpty(base64)) {
             return;
         }
         response.setCharacterEncoding("UTF-8");
@@ -95,8 +95,8 @@ public class FileController implements LastModified {
             inputStream.read(data);
             inputStream.close();
 
-            if (isCheckSuffix(fileName, ALLOW_SUFFIX_IMG)) {
-                response.setContentType("image/" + getSuffix(fileName));
+            if (FileUtil.isCheckSuffix(fileName, ALLOW_SUFFIX_IMG)) {
+                response.setContentType("image/" + FileUtil.getSuffix(fileName));
             }
 
             os = response.getOutputStream();
@@ -121,7 +121,7 @@ public class FileController implements LastModified {
      */
     @GetMapping("/player/{base64}")
     public void player(@PathVariable("base64") String base64, HttpServletRequest request, HttpServletResponse response) {
-        if (isEmpty(base64)){
+        if (isEmpty(base64)) {
             return;
         }
         BufferedInputStream bis = null;
@@ -239,7 +239,7 @@ public class FileController implements LastModified {
      */
     @GetMapping("/download/{base64}")
     public ResponseEntity<byte[]> download(@PathVariable("base64") String base64) throws Exception {
-        if (isEmpty(base64)){
+        if (isEmpty(base64)) {
             return null;
         }
         InputStream inputStream = null;
@@ -307,7 +307,7 @@ public class FileController implements LastModified {
             String extendName = toString(mapParam.get("SF_EXTEND_NAME"));
             //保存路径
             String dir = Properties.FILE_DIR;
-            String filepath = typeCode + "/" + (isEmpty(extendName) ? "" : extendName + "/") + getDate(FORMAT2) + "/";
+            String filepath = typeCode + "/" + (isEmpty(extendName) ? "" : extendName + "/") + FileUtil.getDate(FORMAT2) + "/";
 
 
             JSONArray jsonArray = new JSONArray();
@@ -316,7 +316,7 @@ public class FileController implements LastModified {
                     continue;
                 }
                 String ID = fileNames[i];
-                MultipartFile file = base64ToMultipart(uploadImg[i]);
+                MultipartFile file = FileUtil.base64ToMultipart(uploadImg[i]);
 
                 JSONObject fileObject = saveFile(file, ID, filepath);
                 jsonArray.add(fileObject);
@@ -351,13 +351,13 @@ public class FileController implements LastModified {
             if (!checkResult.isSuccess()) {
                 throw new NullPointerException("token错误");
             }
-            MultipartFile file = getMultipartFile(request);
+            MultipartFile file = FileUtil.getMultipartFile(request);
 
             String typeCode = toString(mapParam.get("SF_TYPE_CODE"));
             String extendName = toString(mapParam.get("SF_EXTEND_NAME"));
             //保存路径
             String dir = Properties.FILE_DIR;
-            String filepath = typeCode + File.separator + (isEmpty(extendName) ? "" : extendName + File.separator) + getDate(FORMAT2) + File.separator;
+            String filepath = typeCode + File.separator + (isEmpty(extendName) ? "" : extendName + File.separator) + FileUtil.getDate(FORMAT2) + File.separator;
 
             String ID = toString(mapParam.get("fileName"));
 
@@ -366,7 +366,7 @@ public class FileController implements LastModified {
             String suffix = toString(fileObject.get("SF_SUFFIX"));
             if ("mp4".equals(suffix) || "mov".equals(suffix)) {
                 //保存缩略图
-                getVideoPic(toString(fileObject.get("absoluteFile")), dir + filepath.concat(File.separator).concat(ID + "-thumbnails.jpg"));
+                FileUtil.getVideoPic(toString(fileObject.get("absoluteFile")), dir + filepath.concat(File.separator).concat(ID + "-thumbnails.jpg"));
             }
 
             jsonObject.put("code", 1);
@@ -432,35 +432,6 @@ public class FileController implements LastModified {
         return fileObject;
     }
 
-    /**
-     * 校验后缀
-     *
-     * @param name
-     * @param suffix
-     * @return
-     */
-    public static boolean isCheckSuffix(String name, String[] suffix) {
-        if (name != null && !"".equals(name)) {
-            name = name.toLowerCase();
-            //判断后缀不区分大小写
-            for (String s : suffix) {
-                if (name.endsWith(s.toLowerCase())) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    /**
-     * 拿到文件后缀
-     *
-     * @param file
-     */
-    public static String getSuffix(String fileName) {
-        return fileName.substring(fileName.lastIndexOf(".") + 1);
-    }
-
     public static String toString(Object str) {
         try {
             return str == null ? "" : new String(str.toString());
@@ -471,160 +442,6 @@ public class FileController implements LastModified {
 
     public static boolean isEmpty(Object value) {
         return value == null || "".equals(value) || "null".equals(value.toString().toLowerCase());
-    }
-
-    public static String getDate(String format) {
-        return new SimpleDateFormat(format).format(new Date());
-    }
-
-    /**
-     * byte[] 转为MultipartFile
-     *
-     * @param base64
-     * @return
-     */
-    public static MultipartFile base64ToMultipart(String base64) {
-        try {
-            String[] baseStrs = base64.split(",");
-
-            BASE64Decoder decoder = new BASE64Decoder();
-            byte[] b = new byte[0];
-            b = decoder.decodeBuffer(baseStrs[1]);
-
-            for (int i = 0; i < b.length; ++i) {
-                if (b[i] < 0) {
-                    b[i] += 256;
-                }
-            }
-
-            return new BASE64DecodedMultipartFile(b, baseStrs[0]);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    /**
-     * 获取上传单个文件
-     *
-     * @param request
-     * @return
-     */
-    public static MultipartFile getMultipartFile(HttpServletRequest request) {
-        MultipartFile imgUpload = null;
-
-        //创建一个通用的多部分解析器
-        CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(request.getSession().getServletContext());
-        //判断 request 是否有文件上传,即多部分请求
-        if (multipartResolver.isMultipart(request)) {
-            //转换成多部分request
-            MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request;
-            //取得request中的所有文件名
-            Iterator<String> iter = multiRequest.getFileNames();
-            while (iter.hasNext()) {
-                imgUpload = multiRequest.getFile(iter.next());
-            }
-        }
-        return imgUpload;
-    }
-
-    /**
-     * 截取视频获得指定帧的图片
-     *
-     * @param video   源视频文件
-     * @param picPath 截图存放路径
-     */
-    public static void getVideoPic(String videoPath, String picPath) throws Exception {
-        try {
-            FFmpegFrameGrabber ff = FFmpegFrameGrabber.createDefault(videoPath);
-            ff.start();
-
-            // 截取第5帧
-            int i = 0;
-            int length = ff.getLengthInFrames();
-            Frame frame = null;
-            while (i < length) {
-                frame = ff.grabImage();
-                if (i > 5 && frame.image != null) {
-                    break;
-                }
-                i++;
-            }
-            //图片是否旋转 矫正
-            String rotate = ff.getVideoMetadata("rotate");
-
-            // 截取的帧图片
-            Java2DFrameConverter converter = new Java2DFrameConverter();
-            BufferedImage srcImage = converter.getBufferedImage(frame);
-            int srcImageWidth = srcImage.getWidth();
-            int srcImageHeight = srcImage.getHeight();
-
-            // 对截图进行等比例缩放(缩略图)
-            int width = 480;
-            int height = (int) (((double) width / srcImageWidth) * srcImageHeight);
-            BufferedImage thumbnailImage = new BufferedImage(width, height, BufferedImage.TYPE_3BYTE_BGR);
-            thumbnailImage.getGraphics().drawImage(srcImage.getScaledInstance(width, height, Image.SCALE_SMOOTH), 0, 0, null);
-
-            File picFile = new File(picPath);
-            if (rotate != null) {
-                //旋转图片
-                thumbnailImage = rotate(thumbnailImage, Integer.parseInt(rotate));
-            }
-            ImageIO.write(thumbnailImage, "jpg", picFile);
-
-            ff.stop();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * 旋转图片
-     *
-     * @param src
-     * @param angel
-     * @return
-     */
-    public static BufferedImage rotate(BufferedImage src, int angel) {
-        int src_width = src.getWidth(null);
-        int src_height = src.getHeight(null);
-        int type = src.getColorModel().getTransparency();
-        Rectangle rect_des = calcRotatedSize(new Rectangle(new Dimension(src_width, src_height)), angel);
-        BufferedImage bi = new BufferedImage(rect_des.width, rect_des.height, type);
-        Graphics2D g2 = bi.createGraphics();
-        g2.translate((rect_des.width - src_width) / 2, (rect_des.height - src_height) / 2);
-        g2.rotate(Math.toRadians(angel), src_width / 2, src_height / 2);
-        g2.drawImage(src, 0, 0, null);
-        g2.dispose();
-        return bi;
-    }
-
-    /**
-     * 计算比例
-     *
-     * @param src
-     * @param angel
-     * @return
-     */
-    public static Rectangle calcRotatedSize(Rectangle src, int angel) {
-        if (angel >= 90) {
-            if (angel / 90 % 2 == 1) {
-                int temp = src.height;
-                src.height = src.width;
-                src.width = temp;
-            }
-            angel = angel % 90;
-        }
-        double r = Math.sqrt(src.height * src.height + src.width * src.width) / 2;
-        double len = 2 * Math.sin(Math.toRadians(angel) / 2) * r;
-        double angel_alpha = (Math.PI - Math.toRadians(angel)) / 2;
-        double angel_dalta_width = Math.atan((double) src.height / src.width);
-        double angel_dalta_height = Math.atan((double) src.width / src.height);
-        int len_dalta_width = (int) (len * Math.cos(Math.PI - angel_alpha - angel_dalta_width));
-        int len_dalta_height = (int) (len * Math.cos(Math.PI - angel_alpha - angel_dalta_height));
-        int des_width = src.width + len_dalta_width * 2;
-        int des_height = src.height + len_dalta_height * 2;
-        return new java.awt.Rectangle(new Dimension(des_width, des_height));
     }
 
     public long getLastModified(HttpServletRequest httpServletRequest) {
