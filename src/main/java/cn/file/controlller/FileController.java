@@ -68,9 +68,9 @@ public class FileController implements LastModified {
      */
     @GetMapping("/preview/{base64}")
     public void preview(@PathVariable("base64") String base64, WebRequest webRequest, HttpServletRequest request, HttpServletResponse response) throws Exception {
-//        if (webRequest.checkNotModified(lastModified)) {
-//            return;
-//        }
+        if (webRequest.checkNotModified(lastModified)) {
+            return;
+        }
         if (isEmpty(base64)) {
             return;
         }
