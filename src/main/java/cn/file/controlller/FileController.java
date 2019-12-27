@@ -82,7 +82,7 @@ public class FileController implements LastModified {
         try {
             //base64解密 获得url信息
             String[] paths = new String(Base64.decode(base64), "UTF-8").split("@@@");
-            String filePath = paths[0];
+            String filePath = paths[0].replaceAll("/",File.separator).replaceAll("\\\\",File.separator);
             String fileName = paths[1];
             //获得文件
             File file = new File(Properties.FILE_DIR + filePath + File.separator + fileName);
@@ -128,7 +128,7 @@ public class FileController implements LastModified {
         try {
             //base64解密 获得url信息
             String[] paths = new String(Base64.decode(base64), "UTF-8").split("@@@");
-            String filePath = paths[0];
+            String filePath = paths[0].replaceAll("/",File.separator).replaceAll("\\\\",File.separator);
             String fileName = paths[1];
             //获得文件
             File file = new File(Properties.FILE_DIR + filePath + File.separator + fileName);
@@ -247,7 +247,7 @@ public class FileController implements LastModified {
         try {
             //base64解密 获得url信息
             String[] paths = new String(Base64.decode(base64), "UTF-8").split("@@@");
-            String filePath = paths[0];
+            String filePath = paths[0].replaceAll("/",File.separator).replaceAll("\\\\",File.separator);
             String fileName = paths[1];
             //获得文件
             File file = new File(Properties.FILE_DIR + filePath + File.separator + fileName);
@@ -307,7 +307,7 @@ public class FileController implements LastModified {
             String extendName = toString(mapParam.get("SF_EXTEND_NAME"));
             //保存路径
             String dir = Properties.FILE_DIR;
-            String filepath = typeCode + "/" + (isEmpty(extendName) ? "" : extendName + "/") + FileUtil.getDate(FORMAT2) + "/";
+            String filepath = typeCode + File.separator + (isEmpty(extendName) ? "" : extendName + File.separator) + FileUtil.getDate(FORMAT2) + File.separator;
 
 
             JSONArray jsonArray = new JSONArray();
