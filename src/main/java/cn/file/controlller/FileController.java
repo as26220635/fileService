@@ -82,7 +82,7 @@ public class FileController implements LastModified {
         try {
             //base64解密 获得url信息
             String[] paths = new String(Base64.decode(base64), "UTF-8").split("@@@");
-            String filePath = paths[0].replaceAll("/",File.separator).replaceAll("\\\\",File.separator);
+            String filePath = FileUtil.getFilePath(paths[0]);
             String fileName = paths[1];
             //获得文件
             File file = new File(Properties.FILE_DIR + filePath + File.separator + fileName);
@@ -128,7 +128,7 @@ public class FileController implements LastModified {
         try {
             //base64解密 获得url信息
             String[] paths = new String(Base64.decode(base64), "UTF-8").split("@@@");
-            String filePath = paths[0].replaceAll("/",File.separator).replaceAll("\\\\",File.separator);
+            String filePath = FileUtil.getFilePath(paths[0]);
             String fileName = paths[1];
             //获得文件
             File file = new File(Properties.FILE_DIR + filePath + File.separator + fileName);
@@ -247,7 +247,7 @@ public class FileController implements LastModified {
         try {
             //base64解密 获得url信息
             String[] paths = new String(Base64.decode(base64), "UTF-8").split("@@@");
-            String filePath = paths[0].replaceAll("/",File.separator).replaceAll("\\\\",File.separator);
+            String filePath = FileUtil.getFilePath(paths[0]);
             String fileName = paths[1];
             //获得文件
             File file = new File(Properties.FILE_DIR + filePath + File.separator + fileName);

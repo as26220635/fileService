@@ -40,7 +40,7 @@ public class FileWSImpl extends BaseServiceImpl implements FileWS {
                 result = false;
                 return result;
             }
-            String fileFilePath = file.getFilePath().replaceAll("/", File.separator).replaceAll("\\\\", File.separator);
+            String fileFilePath = FileUtil.getFilePath(file.getFilePath());
 
             String dir = Properties.FILE_DIR;
             is = file.getFile().getInputStream();
@@ -115,7 +115,7 @@ public class FileWSImpl extends BaseServiceImpl implements FileWS {
         }
         String dir = Properties.FILE_DIR;
         try {
-            String fileFilePath = file.getFilePath().replaceAll("/", File.separator).replaceAll("\\\\", File.separator);
+            String fileFilePath = FileUtil.getFilePath(file.getFilePath());
             File dest = new File(dir + fileFilePath.concat(File.separator).concat(file.getFileName()));
             if (!(dest.isFile() && dest.exists())) {
                 return fileWrapper;
@@ -147,7 +147,7 @@ public class FileWSImpl extends BaseServiceImpl implements FileWS {
                 return result;
             }
             String dir = Properties.FILE_DIR;
-            String fileFilePath = file.getFilePath().replaceAll("/", File.separator).replaceAll("\\\\", File.separator);
+            String fileFilePath = FileUtil.getFilePath(file.getFilePath());
             File dest = new File(dir + fileFilePath.concat(File.separator).concat(file.getFileName()));
             if (dest.isFile() && dest.exists()) {
                 result = dest.delete();

@@ -24,6 +24,7 @@ import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.regex.Matcher;
 
 /**
  * Created by 余庚鑫 on 2017/3/5.
@@ -271,5 +272,15 @@ public class FileUtil {
         int des_width = src.width + len_dalta_width * 2;
         int des_height = src.height + len_dalta_height * 2;
         return new java.awt.Rectangle(new Dimension(des_width, des_height));
+    }
+
+    /**
+     * 获取变更后的路径
+     *
+     * @param path
+     * @return
+     */
+    public static String getFilePath(String path) {
+        return path.replaceAll("/", Matcher.quoteReplacement(File.separator)).replaceAll("\\\\", Matcher.quoteReplacement(File.separator));
     }
 }
