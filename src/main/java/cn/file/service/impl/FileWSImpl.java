@@ -40,13 +40,15 @@ public class FileWSImpl extends BaseServiceImpl implements FileWS {
                 result = false;
                 return result;
             }
+            String fileFilePath = file.getFilePath().replaceAll("/", File.separator).replaceAll("\\\\", File.separator);
+
             String dir = Properties.FILE_DIR;
             is = file.getFile().getInputStream();
-            dest = new File(dir + file.getFilePath());
+            dest = new File(dir + fileFilePath);
             if (!dest.exists()) {
                 dest.mkdirs();
             }
-            dest = new File(dir + file.getFilePath().concat(File.separator).concat(file.getFileName()));
+            dest = new File(dir + fileFilePath.concat(File.separator).concat(file.getFileName()));
             os = new FileOutputStream(dest);
             bos = new BufferedOutputStream(os);
             byte[] buffer = new byte[1024 * 4];
@@ -113,7 +115,8 @@ public class FileWSImpl extends BaseServiceImpl implements FileWS {
         }
         String dir = Properties.FILE_DIR;
         try {
-            File dest = new File(dir + file.getFilePath().concat(File.separator).concat(file.getFileName()));
+            String fileFilePath = file.getFilePath().replaceAll("/", File.separator).replaceAll("\\\\", File.separator);
+            File dest = new File(dir + fileFilePath.concat(File.separator).concat(file.getFileName()));
             if (!(dest.isFile() && dest.exists())) {
                 return fileWrapper;
             }
@@ -144,7 +147,8 @@ public class FileWSImpl extends BaseServiceImpl implements FileWS {
                 return result;
             }
             String dir = Properties.FILE_DIR;
-            File dest = new File(dir + file.getFilePath().concat(File.separator).concat(file.getFileName()));
+            String fileFilePath = file.getFilePath().replaceAll("/", File.separator).replaceAll("\\\\", File.separator);
+            File dest = new File(dir + fileFilePath.concat(File.separator).concat(file.getFileName()));
             if (dest.isFile() && dest.exists()) {
                 result = dest.delete();
             }
